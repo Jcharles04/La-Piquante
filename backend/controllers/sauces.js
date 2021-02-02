@@ -4,7 +4,7 @@ const Sauces = require('../models/Sauces');
 const fs = require('fs');
 
 exports.createSauces = (req, res, next) => {
-    const saucesObject = JSON.parse(req.body.sauces);
+    const saucesObject = JSON.parse(req.body.sauce);
     delete saucesObject._id;
     const sauces = new Sauces({
         ...saucesObject,
@@ -50,6 +50,4 @@ exports.getAllSauces = (req, res, next) => {
         .then(sauces => res.status(200).json(sauces))
         .catch(error => res.status(400).json({ error }));
 };
-
-
 
