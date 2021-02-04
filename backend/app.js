@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 
 const rateLimit = require("express-rate-limit");
+const expressValidator = require('express-validator');
 
 const saucesRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
@@ -19,6 +20,8 @@ mongoose.connect('mongodb+srv://admin:2aZ125Cb<uvb@cluster0.bjgo4.mongodb.net/So
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 const app = express();
+
+app.use(helmet());
 
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -33,9 +36,7 @@ app.use((req, res, next) => {
 });
     
 app.use(bodyParser.json());
-    
 app.use(limiter);
-app.use(helmet());
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
     
