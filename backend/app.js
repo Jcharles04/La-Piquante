@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 
 const rateLimit = require("express-rate-limit");
-const expressValidator = require('express-validator');
+const expressValidator = require('express-validator')
 
 const saucesRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
@@ -36,6 +36,7 @@ app.use((req, res, next) => {
 });
     
 app.use(bodyParser.json());
+    
 app.use(limiter);
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
