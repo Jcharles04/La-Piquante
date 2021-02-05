@@ -8,7 +8,6 @@ const mongoose = require('mongoose');
 const path = require('path');
 
 const rateLimit = require("express-rate-limit");
-const expressValidator = require('express-validator')
 
 const saucesRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
@@ -24,7 +23,7 @@ const app = express();
 app.use(helmet());
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
+    windowMs: 30 * 60 * 1000,
     max: 100
 });
 
