@@ -1,6 +1,5 @@
 "use strict";
 const { body, validationResult } = require('express-validator');
-const { check } = require('express-validator');
 
 exports.validateUser = async (req, res, next) => {
     await body('email').isEmail().run(req);
