@@ -25,6 +25,7 @@ exports.likeSauces = (req, res, next) => {
         .then(sauce => {
             switch(like) {
                 case -1:
+                    console.log('uId : ' + uId);
                     response = {
                         $push : { usersDisliked : uId },
                         $inc: { dislikes : 1 }
@@ -33,6 +34,7 @@ exports.likeSauces = (req, res, next) => {
                 break;
                 
                 case 1:
+                    console.log('uId : ' + uId);
                     response = {
                         $push : { usersLiked : uId },
                         $inc : { likes : 1 }
@@ -41,20 +43,25 @@ exports.likeSauces = (req, res, next) => {
                 break;
 
                 case 0:
+                    console.log('uId : ' + uId);
                     for (let userId in sauce.usersDisliked) {
-                        if (uId === userId ) {
+                        console.log('dislike : ' + userId);
+                        if (uId === sauce.usersDisliked[userId] ) {
+                            console.log('dislike -1');
                             response = 
                             {
-                                $pull : { usersDisliked : userId },
+                                $pull : { usersDisliked : uId },
                                 $inc : { dislikes : -1 }  
                             };
                         };
                     };
-                    for (let userId in sauce.usersLiked) {            
-                        if (uId === userId ) {
+                    for (let userId in sauce.usersLiked) {   
+                        console.log('like : ' + userId);         
+                        if (uId === sauce.usersLiked[userId] ) {
+                            console.log('like -1');
                             response =
                             {
-                                $pull : { usersLiked : userId },
+                                $pull : { usersLiked : uId },
                                 $inc: { likes : -1 }
                             };
                         };
