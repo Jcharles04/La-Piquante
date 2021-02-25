@@ -3,6 +3,7 @@
 const express = require('express');
 const helmet = require("helmet");
 
+const dotenv = require("dotenv").config();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -12,7 +13,7 @@ const rateLimit = require("express-rate-limit");
 const saucesRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
 
-mongoose.connect('mongodb+srv://admin:2aZ125Cb<uvb@cluster0.bjgo4.mongodb.net/SoPecocko?retryWrites=true&w=majority',
+mongoose.connect( process.env.MONGODB_URI,
     {   useNewUrlParser: true,
         useUnifiedTopology: true })
     .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -21,11 +22,12 @@ mongoose.connect('mongodb+srv://admin:2aZ125Cb<uvb@cluster0.bjgo4.mongodb.net/So
 const app = express();
 
 app.use(helmet());
-
 const limiter = rateLimit({
     windowMs: 30 * 60 * 1000,
     max: 100
 });
+
+app.use(limiter);
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -36,7 +38,7 @@ app.use((req, res, next) => {
     
 app.use(bodyParser.json());
     
-app.use(limiter);
+
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
     

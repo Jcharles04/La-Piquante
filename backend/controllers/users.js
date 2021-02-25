@@ -3,13 +3,18 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/Users');
+const dotenv = require("dotenv").config();
+const MaskData = require('maskdata');
 
 
 exports.signup =(req, res, next) => {
+
+    const maskedEmail = MaskData.maskEmail2(req.body.email);
+
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
         const user = new User({
-            email: req.body.email,
+            email: maskedEmail,
             password: hash
         });
         user.save()
@@ -20,8 +25,11 @@ exports.signup =(req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
+
+    const maskedEmail = MaskData.maskEmail2(req.body.email);
+
     console.log('Requête login', req);
-    User.findOne({ email: req.body.email })
+    User.findOne({ email: maskedEmail })
       .then(user => {
         if (!user) {
           return res.status(401).json({ error: 'Utilisateur non trouvé !' });
@@ -35,7 +43,7 @@ exports.login = (req, res, next) => {
               userId: user._id,
               token: jwt.sign(
                 { userId: user._id },
-                'RANDOM_TOKEN_SECRET',
+                process.env.JWT_SECRET_TOKEN,
                 { expiresIn: '24h' }
               )
             });
